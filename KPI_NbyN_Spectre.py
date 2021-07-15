@@ -1,33 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def coarray(coeff_row):
-    global n, ns
-    coeff = np.zeros([ns, 8])
-    for i in range(ns):
-        coeff[i, 0] = coeff_row[i, 0]
-        coeff[i, 1] = coeff_row[i, 1]
-        coeff[i, 2] = coeff_row[i, 2]
-        coeff[i, 3] = coeff_row[i, 3]
-        if i >= n*(n-1):
-            coeff[i, 4] = 0
-        else:
-            coeff[i, 4] = coeff_row[i+n, 0]
-        if i % n == 0 or i >= n*(n-1):
-            coeff[i, 5] = 0
-        else:
-            coeff[i, 5] = coeff_row[i-5, 1]
-        if i % n == 0:
-            coeff[i, 6] = 0
-        else:
-            coeff[i, 6] = coeff_row[i-1, 2]
-        if i < n or i % n == 0:
-            coeff[i, 7] = 0
-        else:
-            coeff[i, 7] = coeff_row[i-7, 3]
-
-    return coeff
-
 # Calculate KPI
 def kpi(spin, coeff, N):
     global n, ns
@@ -54,15 +27,13 @@ def kpi(spin, coeff, N):
     return kpi_temp
 
 # Main
-coeff_row = np.loadtxt('./coeff2.csv', delimiter=',')
-spin = np.loadtxt('./spin2_sweep2_extracted.csv', delimiter=',')
+coeff = np.loadtxt('./coeff3_trans.csv', delimiter=',')
+spin = np.loadtxt('./spin3_Ini_800mV_800mV_1_ex.csv', delimiter=',')
 
 n = 6
 ns = n*n
 
 print(f"Size = {n}")
-coeff = coarray(coeff_row)
-np.savetxt('coeff2_trans.csv', coeff, fmt='%d', delimiter=',')
 KPI = np.zeros(spin[0, :].shape)
 
 for i in range(len(KPI)):
@@ -72,7 +43,7 @@ print(KPI)
 
 plt.figure(figsize=(10, 6))
 plt.plot(KPI)
-plt.title('VDDL = 950mV', fontsize=18)
+plt.title('Ini, VDDRND = 800mV, VDDL = 800mV', fontsize=18)
 plt.xlabel('Iteration', fontsize=10)
 plt.ylabel('KPI', fontsize=10)
 plt.grid()
