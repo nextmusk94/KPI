@@ -18,34 +18,6 @@ def mag(spin):
             m = m + spin[i]
     return m
 
-# Set Coefficient array
-def coarray(coeff_row):
-    global n, ns
-    coeff = np.zeros([ns, 8])
-    for i in range(ns):
-        coeff[i, 0] = coeff_row[i, 0]
-        coeff[i, 1] = coeff_row[i, 1]
-        coeff[i, 2] = coeff_row[i, 2]
-        coeff[i, 3] = coeff_row[i, 3]
-        if i >= n*(n-1):
-            coeff[i, 4] = 0
-        else:
-            coeff[i, 4] = coeff_row[i+n, 0]
-        if i % n == 0 or i >= n*(n-1):
-            coeff[i, 5] = 0
-        else:
-            coeff[i, 5] = coeff_row[i-5, 1]
-        if i % n == 0:
-            coeff[i, 6] = 0
-        else:
-            coeff[i, 6] = coeff_row[i-1, 2]
-        if i < n or i % n == 0:
-            coeff[i, 7] = 0
-        else:
-            coeff[i, 7] = coeff_row[i-7, 3]
-
-    return coeff
-
 # Calculate KPI
 def kpi(spin, coeff, N):
     global n, ns
@@ -84,8 +56,8 @@ def update(spin, beta):
             spin[i] = -spin[i]
 # Main
 
-coeff_row = np.loadtxt('./coeff3.csv', delimiter=',')
-n = 6
+coeff = np.loadtxt('./coeff8_4x4_1.csv', delimiter=',')
+n = 4
 ns = n*n
 iteration = 250
 beta = 0
@@ -95,7 +67,6 @@ print(f"Size = {n}")
 print(f"iteration = {iteration}")
 spin = hot_start()
 KPI = np.zeros(iteration)
-coeff = coarray(coeff_row)
 
 for i in range(iteration):
     update(spin, beta)
@@ -106,7 +77,7 @@ print(KPI)
 
 plt.figure(figsize=(10, 6))
 plt.plot(KPI)
-plt.title('KPI', fontsize=18)
+plt.title('KPI1_CPU', fontsize=18)
 plt.xlabel('Iteration', fontsize=10)
 plt.ylabel('KPI', fontsize=10)
 plt.grid()

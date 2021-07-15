@@ -27,10 +27,10 @@ def kpi(spin, coeff, N):
     return kpi_temp
 
 # Main
-coeff = np.loadtxt('./coeff3_trans.csv', delimiter=',')
-spin = np.loadtxt('./spin3_Ini_800mV_800mV_1_ex.csv', delimiter=',')
+coeff = np.loadtxt('./coeff8_4x4_1.csv', delimiter=',')
+spin = np.loadtxt('./spin1_900mV_800mV_1_ex.csv', delimiter=',')
 
-n = 6
+n = 4
 ns = n*n
 
 print(f"Size = {n}")
@@ -43,7 +43,7 @@ print(KPI)
 
 plt.figure(figsize=(10, 6))
 plt.plot(KPI)
-plt.title('Ini, VDDRND = 800mV, VDDL = 800mV', fontsize=18)
+plt.title('VDDRND = 900mV, VDDL = 800mV', fontsize=18)
 plt.xlabel('Iteration', fontsize=10)
 plt.ylabel('KPI', fontsize=10)
 plt.grid()
