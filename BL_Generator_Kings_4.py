@@ -15,13 +15,12 @@ def D2B(dec):
 
 def vbit_pattern(coeff):
     global n, ns, BW
-    BL = np.zeros(24, dtype=np.float64)
+    BL = np.zeros(BW*n, dtype=np.float64)
     for i in range(n):
         for j in range(n):
             # Up
             if coeff[i*n+j, 0] == 0:
                 BL[j*BW] = BL[j*BW] * 16
-                BL[j*BW] = BL[j*BW] + 0
             elif coeff[i*n+j, 0] == 1:
                 BL[j*BW] = BL[j*BW] * 16
                 BL[j*BW] = BL[j*BW] + 10
@@ -30,40 +29,31 @@ def vbit_pattern(coeff):
                 BL[j*BW] = BL[j*BW] + 8
             # UpRight
             if coeff[i*n+j, 1] == 0:
-                BL[j*BW+2] = BL[j*BW+2] * 64
-                BL[j*BW+2] = BL[j*BW+2] + 40
+                BL[j*BW+1] = BL[j*BW+1] * 16
             elif coeff[i*n+j, 1] == 1:
-                BL[j*BW+2] = BL[j*BW+2] * 64
-                BL[j*BW+2] = BL[j*BW+2] + 42 
+                BL[j*BW+1] = BL[j*BW+1] * 16
+                BL[j*BW+1] = BL[j*BW+1] + 10 
             elif coeff[i*n+j, 1] == -1:
-                BL[j*BW+2] = BL[j*BW+2] * 64
-                BL[j*BW+3] = BL[j*BW+3] * 64
-                BL[j*BW+2] = BL[j*BW+2] + 40
-                BL[j*BW+3] = BL[j*BW+3] + 42
+                BL[j*BW+1] = BL[j*BW+1] * 16
+                BL[j*BW+1] = BL[j*BW+1] + 8
             # Right
             if coeff[i*n+j, 2] == 0:
-                BL[j*BW] = BL[j*BW] * 4
-                BL[j*BW+1] = BL[j*BW+1] * 4
+                BL[j*BW+2] = BL[j*BW+2] * 16
             elif coeff[i*n+j, 2] == 1:
-                BL[j*BW] = BL[j*BW] * 4
-                BL[j*BW+1] = BL[j*BW+1] * 4
-                BL[j*BW] = BL[j*BW] + 2
+                BL[j*BW+2] = BL[j*BW+2] * 16
+                BL[j*BW+2] = BL[j*BW+2] + 10 
             elif coeff[i*n+j, 2] == -1:
-                BL[j*BW] = BL[j*BW] * 4
-                BL[j*BW+1] = BL[j*BW+1] * 4
-                BL[j*BW+1] = BL[j*BW+1] + 2
+                BL[j*BW+2] = BL[j*BW+2] * 16
+                BL[j*BW+2] = BL[j*BW+2] + 8
             # DownRight
             if coeff[i*n+j, 3] == 0:
-                BL[j*BW+2] = BL[j*BW+2] * 4
-                BL[j*BW+3] = BL[j*BW+3] * 4
+                BL[j*BW+3] = BL[j*BW+3] * 16
             elif coeff[i*n+j, 3] == 1:
-                BL[j*BW+2] = BL[j*BW+2] * 4
-                BL[j*BW+3] = BL[j*BW+3] * 4
-                BL[j*BW+2] = BL[j*BW+2] + 2
+                BL[j*BW+3] = BL[j*BW+3] * 16
+                BL[j*BW+3] = BL[j*BW+3] + 10 
             elif coeff[i*n+j, 3] == -1:
-                BL[j*BW+2] = BL[j*BW+2] * 4
-                BL[j*BW+3] = BL[j*BW+3] * 4
-                BL[j*BW+3] = BL[j*BW+3] + 2
+                BL[j*BW+3] = BL[j*BW+3] * 16
+                BL[j*BW+3] = BL[j*BW+3] + 8
     return BL
 
 # Main
@@ -76,9 +66,18 @@ for i in range(BW*n):
     BL_temp = np.zeros(0)
     D2B(BL_dec[i])
     print(BL_temp)
-    BL_bin[i] = BL_temp
+    if BL_temp.size == 12:
+        BL_bin[i] = np.concatenate(([0,0,0,0], BL_temp), axis=None)
+    elif BL_temp.size == 8:
+        BL_bin[i] = np.concatenate(([0,0,0,0,0,0,0,0], BL_temp), axis=None)
+    elif BL_temp.size == 4:
+        BL_bin[i] = np.concatenate(([0,0,0,0,0,0,0,0,0,0,0,0], BL_temp), axis=None)
+    elif BL_temp.size == 0:
+        BL_bin[i] = np.zeros(16)
+    else :
+        BL_bin[i] = BL_temp
 
-np.savetxt('BL_bit1.csv', BL_bin, fmt='%d', delimiter='')
+np.savetxt('BL_bit.csv', BL_bin, fmt='%d', delimiter='')
 
 
 
