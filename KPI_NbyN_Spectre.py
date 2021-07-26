@@ -28,7 +28,7 @@ def kpi(spin, coeff, N):
 
 # Main
 coeff = np.loadtxt('./coeff8_4x4_1.csv', delimiter=',')
-spin = np.loadtxt('./spin2_0V_1V_2_ex.csv', delimiter=',')
+spin = np.loadtxt('./spin1_4x4_5_ex.csv', delimiter=',')
 
 n = 4
 ns = n*n
@@ -42,8 +42,9 @@ for i in range(len(KPI)):
 print(KPI)
 
 plt.figure(figsize=(10, 6))
+plt.plot(KPI, 'b', marker='.', markersize=4)
 plt.plot(KPI)
-plt.title('VDDRND = 0V, VDDL = 1V', fontsize=18)
+plt.title('4x4 spin1 from Spectre', fontsize=18)
 plt.xlabel('Iteration', fontsize=10)
 plt.ylabel('KPI', fontsize=10)
 plt.grid()

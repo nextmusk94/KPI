@@ -56,10 +56,10 @@ def update(spin, beta):
             spin[i] = -spin[i]
 # Main
 
-coeff = np.loadtxt('./coeff8_6x6.csv', delimiter=',')
-n = 6
+coeff = np.loadtxt('./coeff8_4x4_1.csv', delimiter=',')
+n = 4
 ns = n*n
-iteration = 100
+iteration = 400
 beta = 0
 step = 0.02
 
@@ -77,7 +77,7 @@ print(KPI)
 
 plt.figure(figsize=(10, 6))
 plt.plot(KPI)
-plt.title('KPI1_CPU', fontsize=18)
+plt.title('4x4 Spin1 by CPU, GM = -42', fontsize=18)
 plt.xlabel('Iteration', fontsize=10)
 plt.ylabel('KPI', fontsize=10)
 plt.grid()
