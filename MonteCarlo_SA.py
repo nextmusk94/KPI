@@ -56,7 +56,7 @@ def update(spin, beta):
             spin[i] = -spin[i]
 # Main
 
-coeff = np.loadtxt('./coeff8_4x4_1.csv', delimiter=',')
+coeff = np.loadtxt('./coeff_4x4_1.csv', delimiter=',')
 n = 4
 ns = n*n
 iteration = 400
