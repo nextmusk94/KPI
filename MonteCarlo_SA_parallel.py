@@ -62,7 +62,7 @@ def update(spin, beta):
 coeff = np.loadtxt('./coeff_4x4_1.csv', delimiter=',')
 n = 4
 ns = n*n
-iteration = 600
+iteration = 1000
 beta = 0
 step = 0.01
 

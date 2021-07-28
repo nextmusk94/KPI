@@ -1,7 +1,7 @@
 import numpy as np
 
-n = 8
-m = 8
+n = 4
+m = 4
 ns = n*m
 
 coeff = np.random.randint(3, size = (n*m, 4))
@@ -53,5 +53,5 @@ coeff = setzero(coeff)
 coeff = Four2Eight(coeff)
 print(coeff)
 
-np.savetxt('coeff_8x8_1.csv', coeff, fmt='%d', delimiter=',')
+np.savetxt('coeff_4x4_1.csv', coeff, fmt='%d', delimiter=',')
 
