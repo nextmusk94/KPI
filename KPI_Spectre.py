@@ -28,7 +28,7 @@ def kpi(spin, coeff, N):
 
 # Main
 coeff = np.loadtxt('./coeff_4x4_1.csv', delimiter=',')
-spin = np.loadtxt('./spin2_4x4_1_ex.csv', delimiter=',')
+spin = np.loadtxt('./spin2_4x4_2_ex.csv', delimiter=',')
 
 n = 4
 ns = n*n

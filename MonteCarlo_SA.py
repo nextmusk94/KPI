@@ -50,18 +50,20 @@ def update(spin, beta):
     global n, ns
     for i in range(ns):
         E = kpi(spin, coeff, i)
-        if E > 0:
+        dE = -2*E
+        if dE <= 0:
             spin[i] = -spin[i]
-        elif np.exp(beta*E) > np.random.rand():
+        elif np.exp(-beta*dE) > np.random.rand():
             spin[i] = -spin[i]
-# Main
+    return spin
 
+# Main
 coeff = np.loadtxt('./coeff_4x4_1.csv', delimiter=',')
 n = 4
 ns = n*n
-iteration = 600
+iteration = 700
 beta = 0
-step = 0.01
+step = 0.003
 
 print(f"Size = {n}")
 print(f"iteration = {iteration}")
@@ -69,15 +71,15 @@ spin = hot_start()
 KPI = np.zeros(iteration)
 
 for i in range(iteration):
-    update(spin, beta)
+    spin = update(spin, beta)
     beta = beta + step
     for j in range(ns):
         KPI[i] = KPI[i] + kpi(spin, coeff, j)
-print(KPI)
+print(np.amin(KPI))
 
 plt.figure(figsize=(10, 6))
 plt.plot(KPI)
-plt.title('4x4 Spin2 by CPU, GM = -33', fontsize=18)
+plt.title('4x4 Spin2 by CPU, GM = -37', fontsize=18)
 plt.xlabel('Iteration', fontsize=10)
 plt.ylabel('KPI', fontsize=10)
 plt.grid()
