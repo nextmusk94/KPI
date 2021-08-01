@@ -38,26 +38,44 @@ def kpi(spin, coeff, N):
 # The main Monte Carlo Loop
 
 # beta represents 1/kT
-def update(spin, beta):
+def evenupdate(spin, beta):
     global n, ns
     spin_temp = np.copy(spin)
-    for i in range(ns):
-        E = kpi(spin, coeff, i)
-        dE = -2 * E
-        if dE <= 0:
-            spin_temp[i] = -spin[i]
-        elif np.exp(-beta*dE) >= np.random.rand():
-            spin_temp[i] = -spin[i]
+    for i in range(n):
+        for j in range(n):
+            if i % 2 == 0:
+                E = kpi(spin, coeff, i*n+j)
+                dE = -2*E
+                if dE <= 0:
+                    spin_temp[i*n+j] = -spin[i*n+j]
+                elif np.exp(-beta*dE) >= np.random.rand():
+                    spin_temp[i*n+j] = -spin[i*n+j]
     spin = np.copy(spin_temp)
     return spin
+
+def oddupdate(spin, beta):
+    global n, ns
+    spin_temp = np.copy(spin)
+    for i in range(n):
+        for j in range(n):
+            if i % 2 == 1:
+                E = kpi(spin, coeff, i*n+j)
+                dE = -2*E
+                if dE <= 0:
+                    spin_temp[i*n+j] = -spin[i*n+j]
+                elif np.exp(-beta*dE) >= np.random.rand():
+                    spin_temp[i*n+j] = -spin[i*n+j]
+    spin = np.copy(spin_temp)
+    return spin
+
 # Main
 
-coeff = np.loadtxt('./coeff_4x4_1.csv', delimiter=',')
-n = 4
+coeff = np.loadtxt('./coeff_8x8_1.csv', delimiter=',')
+n = 8
 ns = n*n
-iteration = 1000
+iteration = 500
 beta = 0
-step = 0.00001
+step = 0.001
 
 print(f"Size = {n}")
 print(f"iteration = {iteration}")
@@ -65,7 +83,8 @@ spin = hot_start()
 KPI = np.zeros(iteration)
 
 for i in range(iteration):
-    spin = update(spin, beta)
+    spin = evenupdate(spin, beta)
+    spin = oddupdate(spin, beta)
     beta = beta + step
     for j in range(ns):
         KPI[i] = KPI[i] + kpi(spin, coeff, j)
@@ -74,7 +93,7 @@ print(np.amin(KPI))
 
 plt.figure(figsize=(10, 6))
 plt.plot(KPI)
-plt.title('4x4 Spin2 by CPU, GM = -37', fontsize=18)
+plt.title('4x4 Spin2 by CPU', fontsize=18)
 plt.xlabel('Iteration', fontsize=10)
 plt.ylabel('KPI', fontsize=10)
 plt.grid()

@@ -10,14 +10,6 @@ def hot_start():
 
     return spin
 
-# Measure magnetization
-def mag(spin):
-    global ns
-    m = 0
-    for i in range(ns):
-            m = m + spin[i]
-    return m
-
 # Calculate KPI
 def kpi(spin, coeff, N):
     global n, ns
@@ -46,24 +38,58 @@ def kpi(spin, coeff, N):
 # The main Monte Carlo Loop
 
 # beta represents 1/kT
-def update(spin, beta):
+def evenupdate(spin, beta):
     global n, ns
-    for i in range(ns):
-        E = kpi(spin, coeff, i)
-        dE = -2*E
-        if dE <= 0:
-            spin[i] = -spin[i]
-        elif np.exp(-dE*beta) > np.random.rand():
-            spin[i] = -spin[i]
+    spin_temp = np.copy(spin)
+    for i in range(n):
+        for j in range(n):
+            if i % 2 == 0 and j % 2 == 0:
+                E = kpi(spin, coeff, i*n+j)
+                dE = -2*E
+                if dE <= 0:
+                    spin_temp[i*n+j] = -spin[i*n+j]
+                elif np.exp(-beta*dE) >= np.random.rand():
+                    spin_temp[i*n+j] = -spin[i*n+j]
+            elif i % 2 == 1 and j % 2 == 1:
+                E = kpi(spin, coeff, i*n+j)
+                dE = -2*E
+                if dE <= 0:
+                    spin_temp[i*n+j] = -spin[i*n+j]
+                elif np.exp(-beta*dE) >= np.random.rand():
+                    spin_temp[i*n+j] = -spin[i*n+j]
+    spin = np.copy(spin_temp)
+    return spin
+
+def oddupdate(spin, beta):
+    global n, ns
+    spin_temp = np.copy(spin)
+    for i in range(n):
+        for j in range(n):
+            if i % 2 == 0 and j % 2 == 1:
+                E = kpi(spin, coeff, i*n+j)
+                dE = -2*E
+                if dE <= 0:
+                    spin_temp[i*n+j] = -spin[i*n+j]
+                elif np.exp(-beta*dE) >= np.random.rand():
+                    spin_temp[i*n+j] = -spin[i*n+j]
+            elif i % 2 == 1 and j % 2 == 0:
+                E = kpi(spin, coeff, i*n+j)
+                dE = -2*E
+                if dE <= 0:
+                    spin_temp[i*n+j] = -spin[i*n+j]
+                elif np.exp(-beta*dE) >= np.random.rand():
+                    spin_temp[i*n+j] = -spin[i*n+j]
+    spin = np.copy(spin_temp)
     return spin
 
 # Main
+
 coeff = np.loadtxt('./coeff_8x8_1.csv', delimiter=',')
 n = 8
 ns = n*n
-iteration = 1000
+iteration = 10000
 beta = 0
-step = 0.002
+step = 0.0004
 
 print(f"Size = {n}")
 print(f"iteration = {iteration}")
@@ -71,10 +97,12 @@ spin = hot_start()
 KPI = np.zeros(iteration)
 
 for i in range(iteration):
-    spin = update(spin, beta)
+    spin = evenupdate(spin, beta)
+    spin = oddupdate(spin, beta)
     beta = beta + step
     for j in range(ns):
         KPI[i] = KPI[i] + kpi(spin, coeff, j)
+
 print(np.amin(KPI))
 
 plt.figure(figsize=(10, 6))

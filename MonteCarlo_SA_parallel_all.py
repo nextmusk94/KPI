@@ -10,14 +10,6 @@ def hot_start():
 
     return spin
 
-# Measure magnetization
-def mag(spin):
-    global ns
-    m = 0
-    for i in range(ns):
-            m = m + spin[i]
-    return m
-
 # Calculate KPI
 def kpi(spin, coeff, N):
     global n, ns
@@ -48,22 +40,25 @@ def kpi(spin, coeff, N):
 # beta represents 1/kT
 def update(spin, beta):
     global n, ns
+    spin_temp = np.copy(spin)
     for i in range(ns):
         E = kpi(spin, coeff, i)
         dE = -2*E
         if dE <= 0:
-            spin[i] = -spin[i]
-        elif np.exp(-dE*beta) > np.random.rand():
-            spin[i] = -spin[i]
+            spin_temp[i] = -spin[i] 
+        elif np.exp(-beta*dE) >= np.random.rand():
+            spin_temp[i] = -spin[i]  
+    spin = np.copy(spin_temp)
     return spin
 
 # Main
+
 coeff = np.loadtxt('./coeff_8x8_1.csv', delimiter=',')
 n = 8
 ns = n*n
 iteration = 1000
 beta = 0
-step = 0.002
+step = 0.003
 
 print(f"Size = {n}")
 print(f"iteration = {iteration}")
@@ -75,6 +70,7 @@ for i in range(iteration):
     beta = beta + step
     for j in range(ns):
         KPI[i] = KPI[i] + kpi(spin, coeff, j)
+
 print(np.amin(KPI))
 
 plt.figure(figsize=(10, 6))
