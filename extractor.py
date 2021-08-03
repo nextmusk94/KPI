@@ -1,6 +1,6 @@
 import numpy as np
 
-spin = np.loadtxt('./spin2_4x4_2.csv', delimiter=',')
+spin = np.loadtxt('./spin3_4x4_3.csv', delimiter=',')
 n = 4
 ns = n*n
 check = 0
@@ -22,4 +22,4 @@ for i in range(cnt-1):
 spin_final[spin_final > 0.5] = 1
 spin_final[spin_final <= 0.5] = -1
 
-np.savetxt('spin2_4x4_2_ex.csv', spin_final, fmt = '%d', delimiter=',')
+np.savetxt('spin3_4x4_3_ex.csv', spin_final, fmt = '%d', delimiter=',')

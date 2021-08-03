@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import colors
 
 # Calculate KPI
 def kpi(spin, coeff, N):
@@ -28,7 +29,7 @@ def kpi(spin, coeff, N):
 
 # Main
 coeff = np.loadtxt('./coeff_4x4_1.csv', delimiter=',')
-spin = np.loadtxt('./spin2_4x4_2_ex.csv', delimiter=',')
+spin = np.loadtxt('./spin3_4x4_3_ex.csv', delimiter=',')
 
 n = 4
 ns = n*n
@@ -44,12 +45,8 @@ print(KPI)
 plt.figure(figsize=(10, 6))
 plt.plot(KPI, 'b', marker='.', markersize=4)
 plt.plot(KPI)
-plt.title('4x4 spin1 from Spectre', fontsize=18)
+plt.title(f"{n}x{n} spins from Spectre", fontsize=18)
 plt.xlabel('Iteration', fontsize=10)
 plt.ylabel('KPI', fontsize=10)
 plt.grid()
 plt.show()
-
-
-
-

@@ -63,7 +63,7 @@ n = 8
 ns = n*n
 iteration = 1000
 beta = 0
-step = 0.002
+step = 0.003
 
 print(f"Size = {n}")
 print(f"iteration = {iteration}")
@@ -79,7 +79,7 @@ print(np.amin(KPI))
 
 plt.figure(figsize=(10, 6))
 plt.plot(KPI)
-plt.title('4x4 Spin2 by CPU', fontsize=18)
+plt.title(f"{n}x{n} Spin by CPU", fontsize=18)
 plt.xlabel('Iteration', fontsize=10)
 plt.ylabel('KPI', fontsize=10)
 plt.grid()
